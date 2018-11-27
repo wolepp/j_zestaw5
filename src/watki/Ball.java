@@ -16,9 +16,12 @@ public class Ball extends java.lang.Thread {
     private double x, y;
     // składowe wektora prędkości
     private double vx, vy;
+    //TODO: randomowy ma być
+    private Color color;
 
     // granice płótna
     private double top, bottom, left, right;
+
 
     private GraphicsContext gc;
 
@@ -27,6 +30,7 @@ public class Ball extends java.lang.Thread {
         v = 1.0;
     }
 
+    //TODO: kulka ma być kolorowa
     public Ball(GraphicsContext GC) {
         this.gc = GC;
 
@@ -43,10 +47,12 @@ public class Ball extends java.lang.Thread {
         vy = Math.sqrt(v - Math.pow(vx, 2));
     }
 
+    //TODO: każda kulka ma się sama odrysować
     private void clearCanvas() {
         gc.setFill(Color.WHITE);
         gc.fillRect(0,0, right, bottom);
     }
+
     public void run() {
         clearCanvas();
         for (int i = 0; i < 2000; i++) {

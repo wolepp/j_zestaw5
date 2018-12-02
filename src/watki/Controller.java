@@ -1,5 +1,6 @@
 package watki;
 
+import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
@@ -33,11 +34,15 @@ public class Controller {
 
     public void addKulka(ActionEvent actionEvent) {
         Ball ball = new Ball(gc);
-        ball.run();
+        ball.start();
     }
 
     public void switchKulkaState(MouseEvent mouseEvent) {
         double x = mouseEvent.getX();
         double y = mouseEvent.getY();
+    }
+
+    public void clearGC(ActionEvent actionEvent) {
+        clear(gc);
     }
 }

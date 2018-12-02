@@ -1,8 +1,11 @@
 package watki;
 
+import javafx.application.Platform;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.paint.Color;
 
+import javax.imageio.plugins.bmp.BMPImageWriteParam;
 import javax.swing.*;
 import java.util.Random;
 
@@ -16,21 +19,18 @@ public class Ball extends java.lang.Thread {
     private double x, y;
     // składowe wektora prędkości
     private double vx, vy;
-    //TODO: randomowy ma być
     private Color color;
 
     // granice płótna
     private double top, bottom, left, right;
 
-
     private GraphicsContext gc;
 
     static {
         r = 10;
-        v = 1.0;
+        v = 2.0;
     }
 
-    //TODO: kulka ma być kolorowa
     public Ball(GraphicsContext GC) {
         this.gc = GC;
 
@@ -39,32 +39,49 @@ public class Ball extends java.lang.Thread {
         bottom = gc.getCanvas().getHeight();
         right = gc.getCanvas().getWidth();
 
+        // ustalenie losowego położenia
         x = Math.random() * (right - 2*r);
         y = Math.random() * (bottom - 2*r);
 
         // maksymalna prędkość - v pikseli na cykl
         vx = Math.random() * v;
         vy = Math.sqrt(v - Math.pow(vx, 2));
+
+        double r, g, b;
+        do {
+            r = Math.random();
+            g = Math.random();
+            b = Math.random();
+        } while (r + g + b > 2.5);
+        this.color = new Color(r, g, b, 1.0);
     }
 
-    //TODO: każda kulka ma się sama odrysować
     private void clearCanvas() {
-        gc.setFill(Color.WHITE);
-        gc.fillRect(0,0, right, bottom);
-    }
-
-    public void run() {
-        clearCanvas();
-        for (int i = 0; i < 2000; i++) {
-            paint(Color.BLACK);
-            move();
-            paint(Color.PINK);
-            move();
+        synchronized (gc) {
+            gc.setFill(Color.WHITE);
+            gc.fillRect(0, 0, right, bottom);
         }
     }
 
-    private void clear() {
-        gc.clearRect(x, y, r, r);
+    public void run() {
+        while (!Thread.currentThread().isInterrupted()) {
+            // ============================================== Lepiej Platform.runLater czy używać synchronized?
+            try {
+            Platform.runLater(() -> paint(color, x, y));
+            Thread.sleep(20);
+//            Platform.runLater(() -> clear(x, y));
+//            move();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            if (Math.random() < 0.01)
+        this.interrupt();
+    }
+}
+
+    private void clear(double x, double y) {
+        paint(Color.WHITE, x, y);
+
     }
 
     private void move() {
@@ -77,10 +94,13 @@ public class Ball extends java.lang.Thread {
         y += vy;
     }
 
-    private void paint(Color c) {
+    private void paint(Color c, double x, double y) {
+        gc.setGlobalBlendMode(BlendMode.SRC_OVER);
+        gc.setFill(Color.WHITE);
+        gc.fillOval(x, y, 2 * r, 2 * r);
+        move();
         gc.setFill(c);
-        gc.fillOval(x, y, 2*r, 2*r);
-        gc.setFill(Color.BLACK);
+        gc.fillOval(x, y, 2 * r, 2 * r);
     }
 
 }

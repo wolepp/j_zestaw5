@@ -33,26 +33,24 @@ public class Ball extends java.lang.Thread {
 
     public Ball(GraphicsContext GC) {
         this.gc = GC;
+        gc.setGlobalBlendMode(BlendMode.SRC_OVER);
 
         top = 0;
         left = 0;
         bottom = gc.getCanvas().getHeight();
         right = gc.getCanvas().getWidth();
 
-        // ustalenie losowego położenia
         x = Math.random() * (right - 2*r);
         y = Math.random() * (bottom - 2*r);
-
         // maksymalna prędkość - v pikseli na cykl
         vx = Math.random() * v;
         vy = Math.sqrt(v - Math.pow(vx, 2));
-
         double r, g, b;
         do {
             r = Math.random();
             g = Math.random();
             b = Math.random();
-        } while (r + g + b > 2.5);
+        } while (r + g + b > 2.3);
         this.color = new Color(r, g, b, 1.0);
     }
 
@@ -65,23 +63,24 @@ public class Ball extends java.lang.Thread {
 
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
-            // ============================================== Lepiej Platform.runLater czy używać synchronized?
             try {
-            Platform.runLater(() -> paint(color, x, y));
-            Thread.sleep(20);
-//            Platform.runLater(() -> clear(x, y));
-//            move();
+                Platform.runLater(() -> draw());
+                Thread.sleep(20);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-            if (Math.random() < 0.01)
-        this.interrupt();
     }
 }
+    private void draw() {
+        clear(x, y);
+        move();
+        paint(color, x, y);
+    }
 
     private void clear(double x, double y) {
         paint(Color.WHITE, x, y);
-
+        gc.setStroke(Color.WHITE);
+        gc.strokeOval(x, y, 2*r,  2*r);
     }
 
     private void move() {
@@ -96,11 +95,9 @@ public class Ball extends java.lang.Thread {
 
     private void paint(Color c, double x, double y) {
         gc.setGlobalBlendMode(BlendMode.SRC_OVER);
-        gc.setFill(Color.WHITE);
-        gc.fillOval(x, y, 2 * r, 2 * r);
-        move();
         gc.setFill(c);
         gc.fillOval(x, y, 2 * r, 2 * r);
     }
+
 
 }

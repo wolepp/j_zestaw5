@@ -20,10 +20,12 @@ public class Controller {
     private Button kulkaButton;
 
     private GraphicsContext gc;
+    private Box box;
 
     public void initialize() {
         gc = canvas.getGraphicsContext2D();
         clear(gc);
+        box = new Box(gc);
     }
 
     private void clear(GraphicsContext gc) {
@@ -33,7 +35,7 @@ public class Controller {
     }
 
     public void addKulka(ActionEvent actionEvent) {
-        Ball ball = new Ball(gc);
+        Ball ball = new Ball(gc, box);
         ball.start();
     }
 

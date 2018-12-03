@@ -11,6 +11,7 @@ import java.util.Random;
 
 public class Ball extends java.lang.Thread {
 
+    private Box box;
     // promień kulki
     private static double r;
     // prędkość kulki
@@ -20,6 +21,7 @@ public class Ball extends java.lang.Thread {
     // składowe wektora prędkości
     private double vx, vy;
     private Color color;
+    private boolean inside;
 
     // granice płótna
     private double top, bottom, left, right;
@@ -29,6 +31,11 @@ public class Ball extends java.lang.Thread {
     static {
         r = 10;
         v = 2.0;
+    }
+
+    public Ball(GraphicsContext GC, Box box) {
+        this(GC);
+        this.box = box;
     }
 
     public Ball(GraphicsContext GC) {
@@ -54,23 +61,33 @@ public class Ball extends java.lang.Thread {
         this.color = new Color(r, g, b, 1.0);
     }
 
-    private void clearCanvas() {
-        synchronized (gc) {
-            gc.setFill(Color.WHITE);
-            gc.fillRect(0, 0, right, bottom);
-        }
-    }
-
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
             try {
-                Platform.runLater(() -> draw());
+                Platform.runLater(this::draw);
                 Thread.sleep(20);
+                if (!inside && box.isInside(x, y, r)) {
+                    //TODO : poprawić
+//                    box.enter();
+                    inside = true;
+                    this.color = color.invert();
+                    box.paint();
+
+                } else if (inside && !box.isInside(x, y, r)) {
+                    //TODO : poprawić
+//                    box.exit();
+                    inside = false;
+                    this.color = color.invert();
+                } else if (inside) {
+                    box.paint();
+                }
+
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
+        }
     }
-}
+
     private void draw() {
         clear(x, y);
         move();
@@ -98,6 +115,4 @@ public class Ball extends java.lang.Thread {
         gc.setFill(c);
         gc.fillOval(x, y, 2 * r, 2 * r);
     }
-
-
 }

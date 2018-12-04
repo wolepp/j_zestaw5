@@ -119,7 +119,7 @@ public class Ball extends java.lang.Thread {
         gc.fillOval(x, y, 2 * r, 2 * r);
     }
 
-    public boolean isInsideBox() {
+    private boolean isInsideBox() {
         return (x + 2*r >= box.getX() && x <= box.getX() + box.getW()
                 && y + 2*r >= box.getY() && y <= box.getY() + box.getH());
     }

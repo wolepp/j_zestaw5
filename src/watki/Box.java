@@ -20,7 +20,7 @@ public class Box {
         this.h = this.w;
 
         this.x = Math.random() * (canvas.getWidth() - w);
-        this.y = Math.random() * (canvas.getWidth() - h);
+        this.y = Math.random() * (canvas.getHeight() - h);
     }
 
     public void paint() {
@@ -28,9 +28,8 @@ public class Box {
     }
 
     public void painting() {
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.setFill(Color.BLACK);
-        gc.fillRect(x, y, w, h);
+        canvas.getGraphicsContext2D().setFill(Color.BLACK);
+        canvas.getGraphicsContext2D().fillRect(x, y, w, h);
     }
 
     public synchronized void enter() throws InterruptedException {

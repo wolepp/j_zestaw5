@@ -30,7 +30,7 @@ public class Ball extends java.lang.Thread {
 
     static {
         r = 10;
-        v = 2.0;
+        v = 5.0;
     }
 
     public Ball(GraphicsContext GC, Box box) {
@@ -51,7 +51,7 @@ public class Ball extends java.lang.Thread {
         y = Math.random() * (bottom - 2*r);
         // maksymalna prędkość - v pikseli na cykl
         vx = Math.random() * v;
-        vy = Math.sqrt(v - Math.pow(vx, 2));
+        vy = Math.sqrt(Math.pow(v, 2) - Math.pow(vx, 2));
         double r, g, b;
         do {
             r = Math.random();
@@ -66,18 +66,21 @@ public class Ball extends java.lang.Thread {
             try {
                 Platform.runLater(this::draw);
                 Thread.sleep(20);
-                if (!inside && box.isInside(x, y, r)) {
-                    //TODO : poprawić
-//                    box.enter();
+
+                // styknięcie od zewnątrz z Boxem
+                if (!inside && isInsideBox()) {
+                    box.enter();
                     inside = true;
                     this.color = color.invert();
                     box.paint();
 
-                } else if (inside && !box.isInside(x, y, r)) {
-                    //TODO : poprawić
-//                    box.exit();
+               // wylecenie z Boxa
+                } else if (inside && !isInsideBox()) {
+                    box.exit();
                     inside = false;
                     this.color = color.invert();
+
+                //rysowanie boxa
                 } else if (inside) {
                     box.paint();
                 }
@@ -114,5 +117,10 @@ public class Ball extends java.lang.Thread {
         gc.setGlobalBlendMode(BlendMode.SRC_OVER);
         gc.setFill(c);
         gc.fillOval(x, y, 2 * r, 2 * r);
+    }
+
+    public boolean isInsideBox() {
+        return (x + 2*r >= box.getX() && x <= box.getX() + box.getW()
+                && y + 2*r >= box.getY() && y <= box.getY() + box.getH());
     }
 }

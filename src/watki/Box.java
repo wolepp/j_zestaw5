@@ -9,13 +9,15 @@ public class Box {
 
     private double x, y;
     private double w, h;
+    private boolean hasBallInside = false;
 
     private Canvas canvas;
 
     public Box(GraphicsContext gc) {
         this.canvas = gc.getCanvas();
 
-        this.w = this.h = 60;
+        this.w = 200;
+        this.h = this.w;
 
         this.x = Math.random() * (canvas.getWidth() - w);
         this.y = Math.random() * (canvas.getWidth() - h);
@@ -31,20 +33,31 @@ public class Box {
         gc.fillRect(x, y, w, h);
     }
 
-    public synchronized void enter() {
-        try {
+    public synchronized void enter() throws InterruptedException {
+        if (hasBallInside)
             this.wait();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+        hasBallInside = true;
     }
 
     public synchronized void exit() {
-        this.notifyAll();
+        hasBallInside = false;
+        this.notify();
     }
 
-    public boolean isInside(double x, double y, double r) {
-        return (x + 2*r >= this.x && x <= this.x + this.w
-                && y + 2*r >= this.y && y <= this.y + this.h);
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public double getW() {
+        return w;
+    }
+
+    public double getH() {
+        return h;
     }
 }

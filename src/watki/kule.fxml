@@ -5,13 +5,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="420.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="watki.Controller">
+<VBox prefHeight="560.0" prefWidth="823.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="watki.Controller">
   <children>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="420.0" prefWidth="715.0" VBox.vgrow="ALWAYS">
       <children>
-            <Button fx:id="kulkaButton" layoutX="495.0" layoutY="159.0" mnemonicParsing="false" onAction="#addKulka" prefHeight="63.0" prefWidth="131.0" text="Dodaj kulke" />
-            <Canvas fx:id="canvas" height="400.0" layoutX="16.0" layoutY="15.0" onMouseReleased="#switchKulkaState" width="400.0" />
-            <Button fx:id="cleanButton" layoutX="495.0" layoutY="243.0" mnemonicParsing="false" onAction="#clearGC" prefHeight="63.0" prefWidth="131.0" text="Czyść" />
+            <Button fx:id="kulkaButton" layoutX="678.0" layoutY="207.0" mnemonicParsing="false" onAction="#addKulka" prefHeight="63.0" prefWidth="131.0" text="Dodaj kulke" />
+            <Canvas fx:id="canvas" height="531.0" layoutX="16.0" layoutY="15.0" onMouseReleased="#switchKulkaState" width="642.0" />
+            <Button fx:id="cleanButton" layoutX="678.0" layoutY="291.0" mnemonicParsing="false" onAction="#clearGC" prefHeight="63.0" prefWidth="131.0" text="Czyść" />
       </children>
     </AnchorPane>
   </children>
